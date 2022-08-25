@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Child from "./Components/Child";
+import { useMachine } from "@xstate/react";
+import { MachineContext, toggleMachine } from "./Machine";
 
 function App() {
+  const [current, send] = useMachine(toggleMachine);
+  const machine = [current, send];
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <MachineContext.Provider value={machine}>
+        <div className="App">
+          <button onClick={(e) => send("TOGGLE")}>{current.value}</button>
+          <Child />
+        </div>
+      </MachineContext.Provider>
+    </>
   );
 }
 
